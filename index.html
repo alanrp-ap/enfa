@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>En Fa' — Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #E84040;
+    --red-dark: #C93535;
+    --navy: #1A1A2E;
+    --amber: #F5A623;
+    --bg: #F5F5F5;
+    --white: #FFFFFF;
+    --gray-light: #F3F4F6;
+    --gray: #9CA3AF;
+    --gray-dark: #6B7280;
+    --text: #1F2937;
+    --text-soft: #6B7280;
+    --green: #22C55E;
+    --card-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 16px;
+    --font: 'Nunito', sans-serif;
+  }
+
+  body {
+    font-family: var(--font);
+    background: #E5E7EB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* Phone shell */
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: var(--white);
+    border-radius: 48px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.25), 0 0 0 2px #D1D5DB;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* Screen base */
+  .screen {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: var(--white);
+    position: absolute;
+    top: 0; left: 0;
+    animation: fadeIn 0.25s ease;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SPLASH ─── */
+  #splash {
+    background: var(--red);
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+  }
+  .splash-logo {
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .splash-logo svg { width: 44px; height: 44px; }
+  .splash-title {
+    font-size: 42px; font-weight: 900;
+    color: var(--white); letter-spacing: -1px;
+  }
+  .splash-sub {
+    font-size: 15px; color: rgba(255,255,255,0.85);
+    font-weight: 500; letter-spacing: 0.2px;
+  }
+  .splash-hint {
+    position: absolute; bottom: 48px;
+    font-size: 13px; color: rgba(255,255,255,0.6);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 0.6; } 50% { opacity: 1; }
+  }
+
+  /* ─── ONBOARDING ─── */
+  #onboarding {
+    background: var(--white);
+    justify-content: space-between;
+    padding: 80px 32px 48px;
+    align-items: center;
+  }
+  .ob-icon-wrap {
+    width: 120px; height: 120px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ob-icon-wrap svg { width: 56px; height: 56px; }
+  .ob-content { text-align: center; }
+  .ob-title { font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+  .ob-desc { font-size: 15px; color: var(--text-soft); line-height: 1.6; }
+  .ob-dots { display: flex; gap: 8px; }
+  .ob-dot {
+    width: 8px; height: 8px; border-radius: 4px;
+    background: #E5E7EB; transition: all 0.3s;
+  }
+  .ob-dot.active { background: var(--red); width: 24px; }
+  .ob-footer { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+  .btn-primary {
+    width: 100%; padding: 18px;
+    background: var(--red); color: var(--white);
+    border: none; border-radius: 50px;
+    font-family: var(--font); font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:active { transform: scale(0.98); background: var(--red-dark); }
+  .btn-skip {
+    background: none; border: none; color: var(--text-soft);
+    font-family: var(--font); font-size: 15px; font-weight: 600;
+    cursor: pointer; padding: 8px; text-align: center;
+  }
+
+  /* ─── LOGIN ─── */
+  #login {
+    padding: 60px 28px 40px;
+    justify-content: flex-start;
+    gap: 0;
+  }
+  .login-logo {
+    width: 52px; height: 52px;
+    background: var(--red);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 32px;
+  }
+  .login-logo svg { width: 28px; height: 28px; }
+  .login-title { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  .login-sub { font-size: 14px; color: var(--text-soft); margin-bottom: 36px; }
+  .input-label { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .input-wrap {
+    display: flex; align-items: center; gap: 10px;
+    border: 1.5px solid #E5E7EB; border-radius: 14px;
+    padding: 14px 16px; margin-bottom: 24px;
+    background: var(--white);
+  }
+  .input-wrap svg { color: var(--gray); flex-shrink: 0; }
+  .input-wrap input {
+    border: none; outline: none; font-family: var(--font);
+    font-size: 15px; color: var(--text); width: 100%;
+    background: transparent;
+  }
+  .input-wrap input::placeholder { color: var(--gray); }
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 4px 0 20px; color: var(--gray); font-size: 13px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px; background: #E5E7EB;
+  }
+  .btn-google {
+    width: 100%; padding: 16px;
+    background: var(--white); color: var(--text);
+    border: 1.5px solid #E5E7EB; border-radius: 50px;
+    font-family: var(--font); font-size: 15px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: background 0.2s;
+  }
+  .btn-google:hover { background: var(--gray-light); }
+
+  /* ─── HOME ─── */
+  #home { background: var(--white); }
+  .home-scroll {
+    flex: 1; overflow-y: auto; padding: 20px 20px 0;
+    scrollbar-width: none;
+  }
+  .home-scroll::-webkit-scrollbar { display: none; }
+  .home-greeting { font-size: 22px; font-weight: 800; color: var(--text); }
+  .home-sub { font-size: 14px; color: var(--text-soft); margin-bottom: 16px; }
+  .search-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--gray-light); border-radius: 14px;
+    padding: 14px 16px; margin-bottom: 24px;
+  }
+  .search-bar input {
+    border: none; outline: none; background: transparent;
+    font-family: var(--font); font-size: 14px; color: var(--text); width: 100%;
+  }
+  .search-bar input::placeholder { color: var(--gray); }
+  .section-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 14px; }
+  .categories {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-bottom: 24px;
+  }
+  .cat-item {
+    background: var(--gray-light); border-radius: 14px;
+    padding: 16px 8px; display: flex; flex-direction: column;
+    align-items: center; gap: 8px; cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .cat-item:active { transform: scale(0.96); }
+  .cat-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .cat-label { font-size: 12px; font-weight: 700; color: var(--text); }
+  .promo-banner {
+    background: linear-gradient(135deg, var(--red) 0%, var(--amber) 100%);
+    border-radius: var(--radius); padding: 20px;
+    margin-bottom: 24px; cursor: pointer;
+  }
+  .promo-title { font-size: 18px; font-weight: 800; color: white; margin-bottom: 4px; }
+  .promo-sub { font-size: 13px; color: rgba(255,255,255,0.85); }
+  .store-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 0; border-bottom: 1px solid #F3F4F6;
+    cursor: pointer;
+  }
+  .store-img {
+    width: 60px; height: 60px; border-radius: 12px;
+    object-fit: cover; background: #E5E7EB;
+    flex-shrink: 0; font-size: 24px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .store-info { flex: 1; }
+  .store-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .store-type { font-size: 12px; color: var(--text-soft); margin-bottom: 4px; }
+  .store-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-soft); }
+  .star { color: #F59E0B; }
+
+  /* ─── BUSCAR ─── */
+  #buscar { background: var(--white); }
+  .buscar-header { padding: 20px 20px 0; }
+  .buscar-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .back-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text); font-size: 20px; padding: 0;
+    display: flex; align-items: center;
+  }
+  .search-bar-active {
+    display: flex; align-items: center; gap: 10px;
+    border: 2px solid var(--red); border-radius: 14px;
+    padding: 14px 16px; margin-bottom: 16px; background: var(--white);
+  }
+  .search-bar-active input {
+    border: none; outline: none; background: transparent;
+    font-family: var(--font); font-size: 14px; color: var(--text); width: 100%;
+  }
+  .filter-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
+  .filter-chips::-webkit-scrollbar { display: none; }
+  .chip {
+    padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 700;
+    cursor: pointer; white-space: nowrap; border: 1.5px solid transparent;
+    font-family: var(--font); transition: all 0.2s;
+  }
+  .chip.active { background: var(--red); color: white; }
+  .chip:not(.active) { background: var(--gray-light); color: var(--text); }
+  .buscar-scroll { flex: 1; overflow-y: auto; padding: 0 20px 20px; scrollbar-width: none; }
+  .buscar-scroll::-webkit-scrollbar { display: none; }
+
+  /* ─── PERFIL ─── */
+  #perfil { background: var(--white); }
+  .perfil-scroll { flex: 1; overflow-y: auto; padding: 20px; scrollbar-width: none; }
+  .perfil-scroll::-webkit-scrollbar { display: none; }
+  .perfil-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 20px; }
+  .perfil-card {
+    background: var(--gray-light); border-radius: var(--radius);
+    padding: 20px; display: flex; align-items: center; gap: 16px;
+    margin-bottom: 16px;
+  }
+  .avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #E5E7EB; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .perfil-name { font-size: 17px; font-weight: 700; color: var(--text); }
+  .perfil-phone { font-size: 13px; color: var(--text-soft); }
+  .perfil-barrio { font-size: 13px; color: var(--text-soft); }
+  .perfil-edit { font-size: 13px; color: var(--red); font-weight: 700; margin-top: 4px; cursor: pointer; }
+  .faz-card {
+    background: linear-gradient(135deg, var(--amber) 0%, #E8721A 100%);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+  }
+  .faz-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .faz-icon { font-size: 20px; }
+  .faz-label { font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 600; }
+  .faz-points { font-size: 36px; font-weight: 900; color: white; line-height: 1; margin-bottom: 4px; }
+  .faz-unit { font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 600; }
+  .faz-bar-bg { height: 6px; background: rgba(255,255,255,0.3); border-radius: 3px; margin: 12px 0 8px; }
+  .faz-bar { height: 6px; background: white; border-radius: 3px; width: 90%; }
+  .faz-next { font-size: 12px; color: rgba(255,255,255,0.85); }
+  .plus-card {
+    background: var(--navy); border-radius: var(--radius);
+    padding: 20px; margin-bottom: 20px;
+  }
+  .plus-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .plus-icon { font-size: 18px; }
+  .plus-label { font-size: 15px; font-weight: 800; color: white; }
+  .plus-desc { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 16px; line-height: 1.5; }
+  .btn-amber {
+    width: 100%; padding: 14px;
+    background: var(--amber); color: white;
+    border: none; border-radius: 50px;
+    font-family: var(--font); font-size: 14px; font-weight: 700;
+    cursor: pointer;
+  }
+  .menu-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0; border-bottom: 1px solid #F3F4F6; cursor: pointer;
+  }
+  .menu-item-left { display: flex; align-items: center; gap: 12px; }
+  .menu-item-icon { font-size: 18px; width: 24px; text-align: center; }
+  .menu-item-label { font-size: 15px; font-weight: 600; color: var(--text); }
+  .menu-chevron { color: var(--gray); font-size: 14px; }
+
+  /* ─── BOTTOM NAV ─── */
+  .bottom-nav {
+    height: 72px; border-top: 1px solid #F3F4F6;
+    display: flex; align-items: center; justify-content: space-around;
+    padding: 0 8px; background: white; flex-shrink: 0;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4px;
+    cursor: pointer; padding: 8px; border: none; background: none;
+    font-family: var(--font); transition: transform 0.15s;
+  }
+  .nav-item:active { transform: scale(0.92); }
+  .nav-icon { font-size: 22px; line-height: 1; }
+  .nav-label { font-size: 11px; font-weight: 700; color: var(--gray); }
+  .nav-item.active .nav-label { color: var(--red); }
+  .nav-item.active .nav-icon { filter: none; }
+
+  /* ─── DEMO LABEL ─── */
+  .demo-badge {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--navy); color: white; font-family: var(--font);
+    font-size: 12px; font-weight: 700; padding: 8px 20px; border-radius: 50px;
+    letter-spacing: 0.5px; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+
+  /* Scrollable content sections */
+  .section-gap { margin-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ═══════════════ SPLASH ═══════════════ -->
+  <div class="screen active" id="splash" onclick="goTo('onboarding')">
+    <div class="splash-logo">
+      <svg viewBox="0 0 44 44" fill="none">
+        <rect x="4" y="10" width="36" height="28" rx="6" fill="white" opacity="0.9"/>
+        <path d="M14 20 Q22 14 30 20" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="22" cy="24" r="4" fill="#E84040"/>
+      </svg>
+    </div>
+    <div class="splash-title">En Fa'</div>
+    <div class="splash-sub">Tu mandadero de confianza, ahora en tu cel</div>
+    <div class="splash-hint">Toca para continuar</div>
+  </div>
+
+  <!-- ═══════════════ ONBOARDING ═══════════════ -->
+  <div class="screen" id="onboarding">
+    <div class="ob-icon-wrap" id="ob-icon">
+      <svg viewBox="0 0 56 56" fill="none" id="ob-svg">
+        <path d="M28 8 L44 22 L44 48 L12 48 L12 22 Z" fill="white" opacity="0.9"/>
+        <rect x="20" y="32" width="16" height="16" rx="2" fill="rgba(255,255,255,0.5)"/>
+        <path d="M20 22 Q28 16 36 22" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="ob-content">
+      <div class="ob-title" id="ob-title">Pide desde casa</div>
+      <div class="ob-desc" id="ob-desc">Haz tus pedidos desde la comodidad de tu hogar</div>
+    </div>
+    <div class="ob-dots">
+      <div class="ob-dot active" id="dot0"></div>
+      <div class="ob-dot" id="dot1"></div>
+      <div class="ob-dot" id="dot2"></div>
+    </div>
+    <div class="ob-footer">
+      <button class="btn-primary" id="ob-btn" onclick="obNext()">Siguiente</button>
+      <button class="btn-skip" onclick="goTo('login')">Saltar</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ LOGIN ═══════════════ -->
+  <div class="screen" id="login">
+    <div class="login-logo">
+      <svg viewBox="0 0 28 28" fill="none">
+        <rect x="2" y="6" width="24" height="18" rx="4" fill="white" opacity="0.9"/>
+        <path d="M8 13 Q14 9 20 13" stroke="#E84040" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="14" cy="17" r="3" fill="#E84040"/>
+      </svg>
+    </div>
+    <div class="login-title">Bienvenido a En Fa'</div>
+    <div class="login-sub">Ingresa tu número para continuar</div>
+    <div class="input-label">Número de teléfono</div>
+    <div class="input-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.09 1.18 2 2 0 012.08 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+      </svg>
+      <input type="tel" placeholder="55 1234 5678" value="55 1234 5678">
+    </div>
+    <button class="btn-primary" onclick="goTo('home')" style="border-radius:50px;">Continuar</button>
+    <div class="divider">o</div>
+    <button class="btn-google" onclick="goTo('home')">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Continuar con Google
+    </button>
+  </div>
+
+  <!-- ═══════════════ HOME ═══════════════ -->
+  <div class="screen" id="home">
+    <div class="home-scroll">
+      <div class="home-greeting">¡Hola, Usuario!</div>
+      <div class="home-sub">¿Qué necesitas hoy?</div>
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Busca una tienda o dinos qué necesitas...">
+      </div>
+
+      <div class="section-title">Categorías</div>
+      <div class="categories section-gap">
+        <div class="cat-item"><div class="cat-icon">🛒</div><div class="cat-label">Abarrotes</div></div>
+        <div class="cat-item"><div class="cat-icon">💊</div><div class="cat-label">Farmacia</div></div>
+        <div class="cat-item"><div class="cat-icon">🌮</div><div class="cat-label">Comida</div></div>
+        <div class="cat-item"><div class="cat-icon">🥖</div><div class="cat-label">Panadería</div></div>
+        <div class="cat-item"><div class="cat-icon">📦</div><div class="cat-label">Envío</div></div>
+        <div class="cat-item"><div class="cat-icon">🗒️</div><div class="cat-label">Recado</div></div>
+      </div>
+
+      <div class="promo-banner section-gap">
+        <div class="promo-title">¡Envío gratis!</div>
+        <div class="promo-sub">En tu primer pedido de $100 o más</div>
+      </div>
+
+      <div class="section-title">Tiendas cerca de ti</div>
+      <div class="store-card">
+        <div class="store-img">🏪</div>
+        <div class="store-info">
+          <div class="store-name">Abarrotes Lupita</div>
+          <div class="store-type">Abarrotes</div>
+          <div class="store-meta"><span class="star">★</span> 4.8 · 15-25 min · Min $50</div>
+        </div>
+      </div>
+      <div class="store-card">
+        <div class="store-img">💊</div>
+        <div class="store-info">
+          <div class="store-name">Farmacia del Pueblo</div>
+          <div class="store-type">Farmacia</div>
+          <div class="store-meta"><span class="star">★</span> 4.9 · 10-20 min · Min $30</div>
+        </div>
+      </div>
+      <div class="store-card">
+        <div class="store-img">🌮</div>
+        <div class="store-info">
+          <div class="store-name">Tacos Don Pepe</div>
+          <div class="store-type">Comida</div>
+          <div class="store-meta"><span class="star">★</span> 4.7 · 20-30 min · Min $80</div>
+        </div>
+      </div>
+      <div class="store-card">
+        <div class="store-img">🥖</div>
+        <div class="store-info">
+          <div class="store-name">Panadería La Esperanza</div>
+          <div class="store-type">Panadería</div>
+          <div class="store-meta"><span class="star">★</span> 4.9 · 15-25 min · Min $40</div>
+        </div>
+      </div>
+      <div class="store-card" style="border-bottom:none; margin-bottom:16px;">
+        <div class="store-img">🏬</div>
+        <div class="store-info">
+          <div class="store-name">Super Económico</div>
+          <div class="store-type">Abarrotes</div>
+          <div class="store-meta"><span class="star">★</span> 4.6 · 20-30 min · Min $100</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="goTo('home')"><span class="nav-icon">🏠</span><span class="nav-label" style="color:var(--red)">Inicio</span></button>
+      <button class="nav-item" onclick="goTo('buscar')"><span class="nav-icon">🔍</span><span class="nav-label">Buscar</span></button>
+      <button class="nav-item"><span class="nav-icon">🛍️</span><span class="nav-label">Mis Pedidos</span></button>
+      <button class="nav-item" onclick="goTo('perfil')"><span class="nav-icon">👤</span><span class="nav-label">Perfil</span></button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ BUSCAR ═══════════════ -->
+  <div class="screen" id="buscar">
+    <div class="buscar-header">
+      <div class="buscar-title">
+        <button class="back-btn" onclick="goTo('home')">←</button>
+        Buscar
+      </div>
+      <div class="search-bar-active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E84040" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Busca tiendas o productos...">
+      </div>
+      <div class="filter-chips">
+        <button class="chip active">Todos</button>
+        <button class="chip" onclick="this.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); this.classList.add('active')">Abarrotes</button>
+        <button class="chip" onclick="this.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); this.classList.add('active')">Farmacia</button>
+        <button class="chip" onclick="this.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); this.classList.add('active')">Comida</button>
+        <button class="chip" onclick="this.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); this.classList.add('active')">Panadería</button>
+      </div>
+    </div>
+    <div class="buscar-scroll">
+      <div class="store-card">
+        <div class="store-img">🏪</div>
+        <div class="store-info">
+          <div class="store-name">Abarrotes Lupita</div>
+          <div class="store-type">Abarrotes</div>
+          <div class="store-meta"><span class="star">★</span> 4.8 · 15-25 min · Min $50</div>
+        </div>
+      </div>
+      <div class="store-card">
+        <div class="store-img">💊</div>
+        <div class="store-info">
+          <div class="store-name">Farmacia del Pueblo</div>
+          <div class="store-type">Farmacia</div>
+          <div class="store-meta"><span class="star">★</span> 4.9 · 10-20 min · Min $30</div>
+        </div>
+      </div>
+      <div class="store-card">
+        <div class="store-img">🌮</div>
+        <div class="store-info">
+          <div class="store-name">Tacos Don Pepe</div>
+          <div class="store-type">Comida</div>
+          <div class="store-meta"><span class="star">★</span> 4.7 · 20-30 min · Min $80</div>
+        </div>
+      </div>
+      <div class="store-card">
+        <div class="store-img">🥖</div>
+        <div class="store-info">
+          <div class="store-name">Panadería La Esperanza</div>
+          <div class="store-type">Panadería</div>
+          <div class="store-meta"><span class="star">★</span> 4.9 · 15-25 min · Min $40</div>
+        </div>
+      </div>
+      <div class="store-card" style="border-bottom:none;">
+        <div class="store-img">🏬</div>
+        <div class="store-info">
+          <div class="store-name">Super Económico</div>
+          <div class="store-type">Abarrotes</div>
+          <div class="store-meta"><span class="star">★</span> 4.6 · 20-30 min · Min $100</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goTo('home')"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></button>
+      <button class="nav-item active" onclick="goTo('buscar')"><span class="nav-icon">🔍</span><span class="nav-label" style="color:var(--red)">Buscar</span></button>
+      <button class="nav-item"><span class="nav-icon">🛍️</span><span class="nav-label">Mis Pedidos</span></button>
+      <button class="nav-item" onclick="goTo('perfil')"><span class="nav-icon">👤</span><span class="nav-label">Perfil</span></button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PERFIL ═══════════════ -->
+  <div class="screen" id="perfil">
+    <div class="perfil-scroll">
+      <div class="perfil-title">Mi Perfil</div>
+
+      <div class="perfil-card">
+        <div class="avatar">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="perfil-name">Usuario</div>
+          <div class="perfil-phone">5551234567</div>
+          <div class="perfil-barrio">Centro</div>
+          <div class="perfil-edit">Editar perfil</div>
+        </div>
+      </div>
+
+      <div class="faz-card">
+        <div class="faz-header">
+          <span class="faz-icon">🏆</span>
+          <span class="faz-label">Puntos Faz</span>
+        </div>
+        <div class="faz-points">450 <span class="faz-unit">puntos</span></div>
+        <div class="faz-bar-bg"><div class="faz-bar"></div></div>
+        <div class="faz-next">Faltan 50 puntos para el siguiente nivel</div>
+      </div>
+
+      <div class="plus-card">
+        <div class="plus-header">
+          <span class="plus-icon">👑</span>
+          <span class="plus-label">En Fa' Plus</span>
+        </div>
+        <div class="plus-desc">Obtén envío gratis ilimitado, descuentos exclusivos y prioridad en tus pedidos</div>
+        <button class="btn-amber">Suscribirse por $99/mes</button>
+      </div>
+
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <span class="menu-item-icon">📍</span>
+          <span class="menu-item-label">Mis direcciones</span>
+        </div>
+        <span class="menu-chevron">›</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <span class="menu-item-icon">💳</span>
+          <span class="menu-item-label">Métodos de pago</span>
+        </div>
+        <span class="menu-chevron">›</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-left">
+          <span class="menu-item-icon">🔔</span>
+          <span class="menu-item-label">Notificaciones</span>
+        </div>
+        <span class="menu-chevron">›</span>
+      </div>
+      <div class="menu-item" style="border-bottom:none;">
+        <div class="menu-item-left">
+          <span class="menu-item-icon">💬</span>
+          <span class="menu-item-label">Soporte por WhatsApp</span>
+        </div>
+        <span class="menu-chevron">›</span>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="goTo('home')"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></button>
+      <button class="nav-item" onclick="goTo('buscar')"><span class="nav-icon">🔍</span><span class="nav-label">Buscar</span></button>
+      <button class="nav-item"><span class="nav-icon">🛍️</span><span class="nav-label">Mis Pedidos</span></button>
+      <button class="nav-item active" onclick="goTo('perfil')"><span class="nav-icon">👤</span><span class="nav-label" style="color:var(--red)">Perfil</span></button>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<div class="demo-badge">✦ En Fa' — Demo Interactivo</div>
+
+<script>
+  // Onboarding state
+  let obStep = 0;
+  const obData = [
+    {
+      title: 'Pide desde casa',
+      desc: 'Haz tus pedidos desde la comodidad de tu hogar',
+      svg: `<path d="M28 8 L44 22 L44 48 L12 48 L12 22 Z" fill="white" opacity="0.9"/>
+            <rect x="20" y="32" width="16" height="16" rx="2" fill="rgba(255,255,255,0.5)"/>
+            <path d="M20 22 Q28 16 36 22" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+      btn: 'Siguiente'
+    },
+    {
+      title: 'Tu Enfa lo recoge',
+      desc: 'Un mensajero de confianza va por tu compra',
+      svg: `<circle cx="28" cy="18" r="7" fill="white" opacity="0.9"/>
+            <path d="M10 38 Q16 28 28 30 Q40 28 46 38" fill="white" opacity="0.7"/>
+            <circle cx="16" cy="42" r="5" fill="white" opacity="0.9"/>
+            <circle cx="40" cy="42" r="5" fill="white" opacity="0.9"/>
+            <path d="M16 38 L40 38" stroke="white" stroke-width="3" stroke-linecap="round"/>`,
+      btn: 'Siguiente'
+    },
+    {
+      title: 'Llega en minutos',
+      desc: 'Recibe tus productos directo en tu puerta',
+      svg: `<path d="M14 8 L42 8 L38 36 L18 36 Z" fill="white" opacity="0.9"/>
+            <path d="M10 8 L14 8" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="22" cy="42" r="5" fill="white" opacity="0.8"/>
+            <circle cx="36" cy="42" r="5" fill="white" opacity="0.8"/>`,
+      btn: '¡Empieza ya!'
+    }
+  ];
+
+  function obNext() {
+    if (obStep < 2) {
+      obStep++;
+      const d = obData[obStep];
+      document.getElementById('ob-title').textContent = d.title;
+      document.getElementById('ob-desc').textContent = d.desc;
+      document.getElementById('ob-svg').innerHTML = d.svg;
+      document.getElementById('ob-btn').textContent = d.btn;
+      document.querySelectorAll('.ob-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === obStep);
+      });
+    } else {
+      goTo('login');
+    }
+  }
+
+  function goTo(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    // Reset onboarding if going back to it
+    if (screenId === 'onboarding') { obStep = 0; }
+  }
+</script>
+</body>
+</html>
